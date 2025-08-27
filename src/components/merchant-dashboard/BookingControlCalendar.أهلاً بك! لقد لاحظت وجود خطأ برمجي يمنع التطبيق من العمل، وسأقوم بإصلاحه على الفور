@@ -1,0 +1,39 @@
+<horizonsAction type="file" filePath="src/components/merchant-dashboard/bookings-management/BookingControlCalendar/CopySettingsModal.jsx">import React from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { format, isEqual, startOfDay } from 'date-fns';
+import { ar } from "date-fns/locale";
+
+const CopySettingsModal = ({ isOpen, onClose, editModeDate, copyTargetDates, onCopyTargetDatesChange, onConfirmCopy }) => {
+    return (
+        <Dialog open={isOpen} onOpenChange={onClose} dir="rtl">
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle>نسخ إعدادات اليوم</DialogTitle>
+                    <DialogDescription>
+                        اختر يوماً أو أكثر لنسخ إعدادات يوم <span className="font-bold text-primary">{editModeDate ? format(editModeDate, 'PPP', { locale: ar }) : ''}</span> إليها. سيتم نسخ حالة اليوم والفترات الزمنية المتاحة.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="py-4">
+                    <Calendar
+                        mode="multiple"
+                        selected={copyTargetDates}
+                        onSelect={onCopyTargetDatesChange}
+                        className="rounded-md border"
+                        locale={ar}
+                        disabled={(date) => date < startOfDay(new Date()) || (editModeDate && isEqual(date, startOfDay(editModeDate)))}
+                    />
+                </div>
+                <DialogFooter className="gap-2">
+                    <Button variant="ghost" onClick={onClose}>إلغاء</Button>
+                    <Button onClick={onConfirmCopy} disabled={!copyTargetDates || copyTargetDates.length === 0}>
+                        {`نسخ الإعدادات لـ (${copyTargetDates?.length || 0}) أيام`}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+export default CopySettingsModal;
