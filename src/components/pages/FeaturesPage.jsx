@@ -1,74 +1,72 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { 
-    Brain, CreditCard, FileSignature, Package, BarChart3, Users, Bell, PackageSearch, ThumbsUp, Share2, ShieldCheck, Cpu, Settings2, Smartphone, Gem,
-    ChevronLeft, Store, MessageSquare, UserCog, Calculator, Headphones, UserPlus, HeartHandshake, FileText, Search, Ticket, Star
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useToast } from "@/components/ui/use-toast";
+import { Users, Store, ShieldCheck, QrCode, Ticket, CreditCard, Languages, Star, Settings, Briefcase, FileText, Percent, Headphones, Users2, CheckCircle, UserCog, Calculator, Headphones as Headset, UserCheck as UserCheckIcon, Activity, UserPlus } from 'lucide-react';
 
-const FeatureItem = ({ icon: Icon, title, description, iconBgColor = 'gradient-bg', onClick }) => {
-    const { toast } = useToast();
-    const handleClick = () => {
-        if (onClick) {
-            onClick();
-        } else {
-            toast({
-                title: "🚧 ميزة قيد التطوير",
-                description: `ميزة "${title}" ليست مفعلة بعد، ولكن يمكنك طلبها في رسالتك القادمة! 🚀`,
-                variant: "default",
-            });
-        }
-    };
-
-    return (
+const FeatureCard = ({ icon: Icon, title, description, delay, iconBgColor = 'gradient-bg' }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        viewport={{ once: true, amount: 0.3 }}
-        className="bg-white p-6 rounded-2xl shadow-lg card-hover h-full text-center flex flex-col items-center cursor-pointer"
-        onClick={handleClick}
+        transition={{ duration: 0.5, delay }}
+        viewport={{ once: true, amount: 0.5 }}
+        className="bg-white p-6 rounded-2xl shadow-lg card-hover h-full text-center"
     >
-        <div className={`w-16 h-16 ${iconBgColor} rounded-2xl flex items-center justify-center mb-5 shadow-md`}>
+        <div className={`w-16 h-16 ${iconBgColor} rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-md`}>
             <Icon className="h-8 w-8 text-white" />
         </div>
         <h3 className="text-lg font-bold text-gray-800 mb-2">{title}</h3>
-        <p className="text-gray-600 text-sm leading-relaxed flex-grow">{description}</p>
-        <Button variant="link" className="mt-4 text-primary">
-            اعرف المزيد <ChevronLeft className="w-4 h-4 mr-1" />
-        </Button>
+        <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
     </motion.div>
-    );
-};
+);
 
-const FeaturesPage = ({ handleNavigation }) => {
+const PlatformStaffCard = ({ icon: Icon, role, features, delay }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay }}
+        viewport={{ once: true, amount: 0.5 }}
+        className="bg-white p-6 rounded-2xl shadow-lg h-full border-t-4 border-primary"
+    >
+        <div className="flex items-center mb-4">
+            <div className="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center ml-4 shadow-md">
+                <Icon className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="text-lg font-bold text-gray-800">{role}</h3>
+        </div>
+        <p className="text-gray-600 text-sm leading-relaxed">{features}</p>
+    </motion.div>
+);
 
-    const mainFeatures = [
-        { icon: Brain, title: "منصة ذكية شاملة", description: "تجمع كل خدمات المناسبات في مكان واحد: قاعات، تصوير، ورد، ضيافة، تمويل، عقود، تقييمات. تدعم مزوّدي الخدمات بمختلف أحجامهم." },
-        { icon: CreditCard, title: "الدفع والتمويل المرن", description: "دعم الدفع الإلكتروني مع خصومات تلقائية وخطط تمويل من شركاء (تمارا، تابي...). تسوية تلقائية للأرباح بين المزودين." },
-        { icon: FileSignature, title: "عقود إلكترونية مدمجة", description: "توقيع العقود إلكترونيًا من الطرفين داخل المنصة، مع توثيق عبر DocuSign/HelloSign وأرشفة سهلة." },
-        { icon: Package, title: "نظام باقات متكامل", description: "إنشاء باقات تجمع أكثر من مزود (قاعة + تصوير + زينة…) مع توزيع أرباح تلقائي ورسوم اختيارية." },
-        { icon: BarChart3, title: "لوحات تحكم متقدمة", description: "لوحة لكل نوع مستخدم (مزود – عميل – مدير) تعرض بيانات الحجوزات، التقييمات، الأرباح، وتقارير مخصصة وتحليلات ذكية." },
-        { icon: Users, title: "نظام CRM وتفاعل شخصي", description: "ملف كامل لكل عميل مع سجل تفاعلاته، حملات ترويجية تلقائية، وملاحظات داخلية للمزود." },
-        { icon: Bell, title: "نظام إشعارات وتنبيهات احترافي", description: "إشعارات فورية للعميل والمزود، تنبيهات بانخفاض المخزون، وتذكيرات بالمواعيد والمدفوعات." },
-        { icon: PackageSearch, title: "إدارة المخزون والخدمات اللوجستية", description: "تتبع المخزون (ورود، طعام، هدايا) مع تنبيهات بإعادة الطلب، ودعم إدارة التسليم ونقل المعدات." },
-        { icon: ThumbsUp, title: "تجربة مستخدم متميزة", description: "تصميم سهل وجذاب باللغة العربية، واجهات مخصصة، ودعم متكامل للجوال والكمبيوتر." },
-        { icon: Share2, title: "التسويق والترويج الداخلي", description: "إنشاء عروض وخصومات ونشرها عبر المنصة أو السوشيال ميديا، مع تكامل مباشر ودعم كوبونات." },
-        { icon: ShieldCheck, title: "أمان عالي وحوكمة رقمية", description: "نظام صلاحيات RBAC، حماية بيانات بتشفير HTTPS، نسخ احتياطي، ومراجعة نزاعات داخلية." },
-        { icon: Cpu, title: "التحليلات والذكاء الاصطناعي", description: "تقارير مبيعات حسب الموسم، تحليل الحجوزات الرائجة، وتوصيات للمزودين بناءً على الأداء." },
-        { icon: Settings2, title: "مرونة تشغيلية عالية", description: "دعم أنواع متعددة من المناسبات، تخصيص النظام حسب نوع المزود، وإدارة عدد الزوار وتكلفة إضافية تلقائية." },
-        { icon: Smartphone, title: "جاهزية للتوسع مستقبلاً", description: "إمكانية تطوير تطبيق جوال (iOS/Android)، دعم التكامل مع أنظمة محاسبة خارجية أو ERP، وبنية قابلة للنمو." },
-        { icon: Gem, title: "ميزات قانونية وتشغيلية احترافية", description: "مكتبة عقود قانونية جاهزة، تصعيد تلقائي للنزاعات، وتسجيل كل المعاملات بسجل قابل للتدقيق." },
+
+const FeaturesPage = ({ handleFeatureClick }) => {
+
+    const clientFeatures = [
+        { icon: Ticket, title: "مرونة الحجز", description: "احجز كزائر أو بحساب، اختر مقعدك من مخطط تفاعلي، أو حدد طاولتك ووقتها في المطاعم بكل سهولة.", iconBgColor: "bg-sky-500" },
+        { icon: CreditCard, title: "دفع إلكتروني آمن", description: "ندعم كافة طرق الدفع: بطاقات ائتمan، Apple Pay، والتحويل البنكي، لتجربة دفع سلسة وموثوقة.", iconBgColor: "bg-emerald-500" },
+        { icon: QrCode, title: "استلام فوري للتذاكر", description: "استلم تذاكرك فوراً بعد الدفع عبر الإيميل، مع دعم إضافتها إلى محافظ Apple و Google.", iconBgColor: "bg-indigo-500" },
+        { icon: Settings, title: "إدارة الحجوزات", description: "ألغِ أو عدّل حجزك (حسب سياسة التاجر)، واطلع على سجل حجوزاتك السابقة في أي وقت.", iconBgColor: "bg-slate-600" },
+        { icon: Languages, title: "واجهة ثنائية اللغة", description: "استخدم المنصة باللغة العربية أو الإنجليزية لتجربة مريحة ومخصصة لك.", iconBgColor: "bg-amber-500" },
+        { icon: Star, title: "برنامج النقاط والمكافآت", description: "اجمع نقاطاً مع كل حجز واستبدلها بمكافآت وخصومات حصرية من التجار المشاركين.", iconBgColor: "bg-rose-500" }
     ];
-    
-    const platformFeatures = [
-      { icon: Users, title: "للعملاء", description: "بحث سهل، حجز ذكي، دفع آمن وتمويل، توقيع عقود إلكتروني، تقييم ومراجعات، تواصل مباشر مع المزودين.", iconBgColor: "bg-sky-500", targetView: "roles" },
-      { icon: Store, title: "لمزوّدي الخدمات", description: "لوحة تحكم شاملة، إدارة مخزون، باقات مشتركة، تقارير وتحليلات، أدوات تسويق، خدمات قانونية متكاملة.", iconBgColor: "bg-purple-500", targetView: "merchant-journey" },
-      { icon: ShieldCheck, title: "لإدارة المنصة", description: "صلاحيات كاملة، إدارة المزودين والعملاء، مراقبة مالية، دعم فني، تسويق وشراكات، وتقارير أداء شاملة.", iconBgColor: "bg-red-500", targetView: "roles" }
+
+    const merchantFeatures = [
+        { icon: Store, title: "موقع خاص (Subdomain)", description: "امتلك نطاقاً فرعياً خاصاً وهوية بصرية كاملة تعكس علامتك التجارية.", iconBgColor: "bg-blue-500" },
+        { icon: Briefcase, title: "إدارة متكاملة للخدمات", description: "أضف فعالياتك، مطاعمك، أو معارضك، وحدد الأسعار والأوقات، مع دعم للمخططات التفاعلية.", iconBgColor: "bg-green-500" },
+        { icon: FileText, title: "إدارة الحجوزات والدخل", description: "تحكم كامل في حجوزاتك، وتابع دخلك، واسحب أرباحك بسهولة وأمان.", iconBgColor: "bg-purple-500" },
+        { icon: Users2, title: "إدارة الفريق والصلاحيات", description: "ادعُ فريق عملك وحدد صلاحيات كل فرد (مشرف، مدقق، دعم فني) بكفاءة.", iconBgColor: "bg-cyan-500" },
+        { icon: Percent, title: "أنظمة الترويج والتسويق", description: "أنشئ روابط تسويق خاصة واربط حساباتك على الشبكات الاجتماعية لزيادة مبيعاتك.", iconBgColor: "bg-pink-500" },
+        { icon: Headphones, title: "POS – البيع من المقر", description: "أصدر تذاكر وسجل عمليات الدفع اليدوي مباشرة من مقر عملك بكل سلاسة.", iconBgColor: "bg-orange-500" }
     ];
 
+    const platformStaff = [
+        { role: "مدير المنصة", icon: UserCog, features: "صلاحيات كاملة لإدارة كل جوانب المنصة: التجار، العمولات، التقارير، والنطاقات." },
+        { role: "مشرف", icon: UserCheckIcon, features: "يدير الموظفين، يراقب أداء وحسابات التجار، ويتابع تذاكر الدعم الفني." },
+        { role: "أخصائي حسابات", icon: FileText, features: "يراجع وثائق وبيانات التجار البنكية ويقوم بتنفيذ عمليات سحب الأرباح." },
+        { role: "محاسب", icon: Calculator, features: "ينفذ عمليات الدفع للتجار، يعد التقارير المالية، ويتتبع التحصيلات والعمولات." },
+        { role: "أخصائي دعم", icon: Headset, features: "يجيب على استفسارات العملاء والتجار، مع صلاحيات محدودة لا تشمل البيانات المالية." },
+        { role: "أخصائي عمليات", icon: Activity, features: "يتابع الفعاليات والطلبات وعمليات الإلغاء والاسترجاع لضمان سلاسة العمل." },
+        { role: "مندوب مبيعات", icon: UserPlus, features: "يركز على جلب تجار جدد ويحصل على عمولة من العمليات التي تتم عن طريقه." }
+    ];
 
     return (
         <div className="min-h-screen bg-slate-50 py-16">
@@ -79,36 +77,43 @@ const FeaturesPage = ({ handleNavigation }) => {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-12"
                 >
-                    <h1 className="text-4xl md:text-5xl font-extrabold gradient-text mb-4">🌟 مميزات منصة ليلة الليليوم</h1>
+                    <h1 className="text-4xl md:text-5xl font-extrabold gradient-text mb-4">مميزات لكل مستخدم</h1>
                     <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-                        اكتشف كيف تجعل "ليلة الليليوم" تنظيم مناسباتك أسهل وأكثر إبهارًا مع مجموعة من الميزات المصممة خصيصًا لك.
+                        نقدم مجموعة أدوات ومميزات مخصصة لكل دور في المنصة، لضمان تجربة سلسة ومتكاملة للجميع.
                     </p>
                 </motion.div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                    {mainFeatures.map((feature, index) => (
-                        <FeatureItem key={index} {...feature} />
-                    ))}
-                </div>
-
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: mainFeatures.length * 0.05 + 0.2 }}
-                    className="text-center mb-12"
-                >
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">ميزات مخصصة لكل دور</h2>
-                    <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                        نقدم أدوات وميزات مصممة لتلبية الاحتياجات الفريدة لكل من العملاء، مزوّدي الخدمات، وفريق إدارة المنصة.
-                    </p>
-                </motion.div>
-                
-                <div className="grid md:grid-cols-3 gap-8">
-                    {platformFeatures.map((feature, index) => (
-                       <FeatureItem key={index} {...feature} onClick={feature.targetView ? () => handleNavigation(feature.targetView) : undefined} />
-                    ))}
-                </div>
-
+                <Tabs defaultValue="client" className="w-full" dir="rtl">
+                    <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-2 h-auto p-2 bg-primary/10 rounded-xl">
+                        <TabsTrigger value="client" className="flex items-center gap-2 text-sm md:text-base py-2.5"><Users className="h-5 w-5"/>العميل</TabsTrigger>
+                        <TabsTrigger value="merchant" className="flex items-center gap-2 text-sm md:text-base py-2.5"><Store className="h-5 w-5"/>التاجر</TabsTrigger>
+                        <TabsTrigger value="platform_staff" className="flex items-center gap-2 text-sm md:text-base py-2.5"><ShieldCheck className="h-5 w-5"/>إدارة المنصة</TabsTrigger>
+                    </TabsList>
+                    
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+                        <TabsContent value="client" className="mt-10">
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {clientFeatures.map((feature, index) => (
+                                    <FeatureCard key={index} {...feature} delay={index * 0.1} />
+                                ))}
+                            </div>
+                        </TabsContent>
+                        <TabsContent value="merchant" className="mt-10">
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {merchantFeatures.map((feature, index) => (
+                                    <FeatureCard key={index} {...feature} delay={index * 0.1} />
+                                ))}
+                            </div>
+                        </TabsContent>
+                        <TabsContent value="platform_staff" className="mt-10">
+                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {platformStaff.map((staffMember, index) => (
+                                    <PlatformStaffCard key={index} {...staffMember} delay={index * 0.1} />
+                                ))}
+                            </div>
+                        </TabsContent>
+                    </motion.div>
+                </Tabs>
             </div>
         </div>
     );

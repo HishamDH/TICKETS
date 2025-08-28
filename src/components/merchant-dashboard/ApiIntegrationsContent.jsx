@@ -1,105 +1,102 @@
-import React, { useState, useEffect, memo } from 'react';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Key, Copy, RefreshCw, PlusCircle, Trash2, Webhook } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast";
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Copy, RefreshCw, Book, ArrowRight, Plug } from 'lucide-react';
 
-const ApiIntegrationsContent = memo(({ handleFeatureClick }) => {
-    const { toast } = useToast();
-    const [apiKey, setApiKey] = useState(localStorage.getItem('lilium_night_api_key_v1') || 'sk_live_********************');
-    const [webhooks, setWebhooks] = useState(JSON.parse(localStorage.getItem('lilium_night_webhooks_v1')) || [
-        { id: 'wh1', url: 'https://api.example.com/webhook/lilium' },
-    ]);
-    const [newWebhookUrl, setNewWebhookUrl] = useState('');
+const webhooks = [
+    { event: 'booking.created', description: 'يتم تفعيله عند إنشاء حجز جديد.' },
+    { event: 'booking.confirmed', description: 'يتم تفعيله عند تأكيد حجز.' },
+    { event: 'booking.cancelled', description: 'يتم تفعيله عند إلغاء حجز.' },
+    { event: 'checkin.success', description: 'يتم تفعيله عند تسجيل وصول ناجح.' },
+];
 
-    useEffect(() => {
-        localStorage.setItem('lilium_night_api_key_v1', apiKey);
-        localStorage.setItem('lilium_night_webhooks_v1', JSON.stringify(webhooks));
-    }, [apiKey, webhooks]);
-
-    const regenerateApiKey = () => {
-        const newKey = `sk_live_${[...Array(20)].map(() => Math.random().toString(36)[2]).join('')}`;
-        setApiKey(newKey);
-        toast({ title: "تم إنشاء مفتاح جديد!", description: "تم إنشاء مفتاح API جديد. قم بتحديثه في تطبيقاتك." });
-        handleFeatureClick("إنشاء مفتاح API جديد");
-    };
-
-    const copyToClipboard = (text, message) => {
-        navigator.clipboard.writeText(text).then(() => toast({ title: "تم النسخ!", description: message }));
-        handleFeatureClick(message);
-    };
-
-    const addWebhook = () => {
-        if (!newWebhookUrl.startsWith('https://')) {
-            toast({ title: "خطأ", description: "الرجاء إدخال رابط صحيح يبدأ بـ https://", variant: "destructive" });
-            return;
-        }
-        setWebhooks([...webhooks, { id: `wh${Date.now()}`, url: newWebhookUrl }]);
-        setNewWebhookUrl('');
-        toast({ title: "تمت الإضافة", description: "تم إضافة Webhook جديد بنجاح." });
-        handleFeatureClick(`إضافة Webhook: ${newWebhookUrl}`);
-    };
-
-    const deleteWebhook = (id) => {
-        const webhookToDelete = webhooks.find(wh => wh.id === id);
-        setWebhooks(webhooks.filter(wh => wh.id !== id));
-        handleFeatureClick(`حذف Webhook: ${webhookToDelete.url}`);
-    };
+const ApiIntegrationsContent = ({ handleFeatureClick }) => {
+    const apiKey = "shb_live_sk_XXXXXXXXXXXXXXXXXXXX";
 
     return (
         <div className="space-y-8">
-            <h2 className="text-3xl font-bold text-slate-800">الربط البرمجي (API)</h2>
+            <div className="flex justify-between items-start">
+                <div>
+                    <h2 className="text-3xl font-bold text-slate-800">API والتكاملات</h2>
+                    <p className="text-slate-500 mt-2">قم بربط أنظمتك الخارجية وقم بأتمتة مهامك عبر واجهة برمجة التطبيقات (API).</p>
+                </div>
+                <Button variant="outline" onClick={() => handleFeatureClick("قراءة الوثائق")}>
+                    <Book className="w-4 h-4 ml-2" />
+                    وثائق الـ API
+                </Button>
+            </div>
+            
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Key /> مفتاح API الخاص بك</CardTitle>
-                    <CardDescription>استخدم هذا المفتاح لربط أنظمتك الخارجية مع منصة ليلة الليليوم. حافظ على سريته.</CardDescription>
+                    <CardTitle>مفاتيح الـ API</CardTitle>
+                    <CardDescription>استخدم هذه المفاتيح لمصادقة طلباتك. حافظ على سريتها!</CardDescription>
                 </CardHeader>
-                <CardContent className="flex items-center gap-4">
-                    <Input value={apiKey} readOnly className="font-mono" />
-                    <Button variant="outline" onClick={() => copyToClipboard(apiKey, "تم نسخ مفتاح API.")}><Copy className="w-4 h-4" /></Button>
-                    <Button variant="destructive" onClick={regenerateApiKey}><RefreshCw className="w-4 h-4 ml-2" /> إنشاء مفتاح جديد</Button>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Webhook /> إدارة Webhooks</CardTitle>
-                    <CardDescription>أضف روابط Webhook ليتم إعلام أنظمتك تلقائياً عند وقوع أحداث معينة (مثل حجز جديد).</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="flex items-center gap-2 mb-4">
-                        <Input 
-                            placeholder="https://api.example.com/webhook" 
-                            value={newWebhookUrl}
-                            onChange={(e) => setNewWebhookUrl(e.target.value)}
-                        />
-                        <Button onClick={addWebhook}><PlusCircle className="w-4 h-4 ml-2" /> إضافة</Button>
+                <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="api-key">مفتاح API السري</Label>
+                        <div className="flex gap-2">
+                            <Input id="api-key" type="password" readOnly value={apiKey} className="font-mono"/>
+                            <Button variant="outline" size="icon" onClick={() => handleFeatureClick("نسخ المفتاح")}>
+                                <Copy className="w-4 h-4" />
+                            </Button>
+                            <Button variant="outline" size="icon" onClick={() => handleFeatureClick("إنشاء مفتاح جديد")}>
+                                <RefreshCw className="w-4 h-4" />
+                            </Button>
+                        </div>
                     </div>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>رابط الـ Webhook</TableHead>
-                                <TableHead>إجراء</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {webhooks.map(wh => (
-                                <TableRow key={wh.id}>
-                                    <TableCell className="font-mono">{wh.url}</TableCell>
-                                    <TableCell>
-                                        <Button variant="ghost" size="icon" onClick={() => deleteWebhook(wh.id)}>
-                                            <Trash2 className="w-4 h-4 text-red-500" />
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
                 </CardContent>
             </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Webhooks</CardTitle>
+                    <CardDescription>احصل على إشعارات بالأحداث الهامة في أنظمتك عبر Webhooks.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="webhook-url">عنوان URL لنقطة النهاية (Endpoint)</Label>
+                        <div className="flex gap-2">
+                            <Input id="webhook-url" placeholder="https://your-app.com/webhook" />
+                            <Button onClick={() => handleFeatureClick("إضافة Webhook")}>
+                                <Plug className="w-4 h-4 ml-2" />
+                                إضافة
+                            </Button>
+                        </div>
+                    </div>
+                    <div className="border rounded-lg">
+                        <div className="p-4">
+                            <h4 className="font-semibold text-slate-800">الأحداث المتاحة</h4>
+                            <p className="text-sm text-slate-500">اختر الأحداث التي تريد الاشتراك بها.</p>
+                        </div>
+                        <div className="divide-y">
+                            {webhooks.map((hook) => (
+                                <div key={hook.event} className="flex items-center justify-between p-4">
+                                    <div>
+                                        <p className="font-mono text-sm font-medium bg-slate-100 px-2 py-1 rounded inline-block">{hook.event}</p>
+                                        <p className="text-sm text-slate-500 mt-1">{hook.description}</p>
+                                    </div>
+                                    <Switch 
+                                        onCheckedChange={() => handleFeatureClick(`تفعيل ${hook.event}`)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                     <div className="mt-4 flex justify-end">
+                        <Button variant="link" className="p-0 h-auto" onClick={() => handleFeatureClick("عرض سجلات Webhook")}>
+                           عرض سجلات Webhook
+                           <ArrowRight className="w-4 h-4 mr-2" />
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
+
         </div>
     );
-});
+};
 
 export default ApiIntegrationsContent;

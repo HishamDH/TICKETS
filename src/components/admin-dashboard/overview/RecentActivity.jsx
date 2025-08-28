@@ -1,55 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const allActivities = [
-    { name: "علياء حسن", email: "aliaa@example.com", amount: "+3,150.00 ريال", action: "حجز جديد", category: 'venues' },
-    { name: "يوسف خالد", email: "youssef@example.com", amount: "+1,200.00 ريال", action: "حجز جديد", category: 'catering' },
-    { name: "نور أحمد", email: "nour@example.com", amount: "+500.00 ريال", action: "تجديد اشتراك", category: 'venues' },
-    { name: "أحمد الغامدي", email: "ahmed@example.com", amount: "-250.00 ريال", action: "إلغاء حجز", category: 'catering' },
-    { name: "سارة عبدالله", email: "sara@example.com", amount: "+8,500.00 ريال", action: "حجز جديد", category: 'venues' },
-    { name: "محمد علي", email: "mohammed@example.com", amount: "+2,000.00 ريال", action: "حجز جديد", category: 'photography' },
+import React from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+
+const activities = [
+    { name: 'متجر الزهور', action: 'طلب سحب جديد بقيمة 500 ريال', time: 'قبل 5 دقائق', avatar: 'https://images.unsplash.com/photo-1596854307809-6e754c522f95?q=80&w=200' },
+    { name: 'مطعم أكلات بحرية', action: 'تحديث بيانات الحساب البنكي', time: 'قبل 15 دقيقة', avatar: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=200' },
+    { name: 'فعالية إطلاق المنتج', action: 'تمت الموافقة على الفعالية', time: 'قبل ساعة', avatar: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=200' },
+    { name: 'أحمد (دعم فني)', action: 'أغلق تذكرة دعم #1123', time: 'قبل 3 ساعات', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200' },
 ];
 
-const RecentActivity = ({ filters }) => {
-    const [activities, setActivities] = useState(allActivities);
-
-    useEffect(() => {
-        setActivities(
-            allActivities.filter(activity => 
-                filters.category === 'all' || activity.category === filters.category
-            ).slice(0, 5)
-        );
-    }, [filters]);
-
+const RecentActivity = ({ handleFeatureClick }) => {
     return (
-        <Card>
+        <Card className="h-full flex flex-col">
             <CardHeader>
-                <CardTitle>الأنشطة الأخيرة</CardTitle>
-                <CardDescription>تم تسجيل {activities.length} عملية جديدة هذا اليوم.</CardDescription>
+                <CardTitle>أحدث الأنشطة</CardTitle>
+                <CardDescription>آخر العمليات التي تمت في المنصة.</CardDescription>
             </CardHeader>
-            <CardContent>
-                <div className="space-y-8">
+            <CardContent className="flex-grow">
+                <div className="space-y-6">
                     {activities.map((activity, index) => (
-                        <div key={index} className="flex items-center">
-                            <Avatar className="h-9 w-9">
-                                <AvatarImage src={`https://source.unsplash.com/random/200x200?sig=${index}`} alt="Avatar" />
+                        <div key={index} className="flex items-start gap-4">
+                            <Avatar>
+                                <AvatarImage src={activity.avatar} />
                                 <AvatarFallback>{activity.name.charAt(0)}</AvatarFallback>
                             </Avatar>
-                            <div className="ml-4 space-y-1">
-                                <p className="text-sm font-medium leading-none">{activity.name}</p>
-                                <p className="text-sm text-muted-foreground">{activity.email}</p>
-                            </div>
-                            <div className="ml-auto font-medium text-right">
-                                <p className={activity.amount.startsWith('+') ? 'text-green-500' : 'text-red-500'}>{activity.amount}</p>
-                                <p className="text-xs text-muted-foreground">{activity.action}</p>
+                            <div>
+                                <p className="text-sm font-medium text-slate-800">{activity.name}</p>
+                                <p className="text-sm text-slate-500">{activity.action}</p>
+                                <p className="text-xs text-slate-400">{activity.time}</p>
                             </div>
                         </div>
                     ))}
                 </div>
             </CardContent>
+            <div className="p-4 border-t">
+                 <Button variant="ghost" className="w-full" onClick={() => handleFeatureClick("View All Activities")}>
+                    عرض كل الأنشطة <ArrowLeft className="w-4 h-4 mr-2" />
+                </Button>
+            </div>
         </Card>
     );
 };
 
-export default React.memo(RecentActivity);
+export default RecentActivity;

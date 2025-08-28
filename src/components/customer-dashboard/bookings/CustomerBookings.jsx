@@ -1,167 +1,68 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
+
+import React from 'react';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Calendar, Star, MessageSquare, FileText, Download, Ticket } from 'lucide-react';
-import { format, parseISO, isFuture, isPast } from 'date-fns';
-import { ar } from 'date-fns/locale';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useVirtualizer } from '@tanstack/react-virtual';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Eye, XCircle, Edit, Star } from 'lucide-react';
 
-const statusMap = {
-    paid: { label: 'مؤكد', color: 'bg-green-100 text-green-800' },
-    awaiting_confirmation: { label: 'بانتظار التأكيد', color: 'bg-yellow-100 text-yellow-800' },
-    used: { label: 'مكتمل', color: 'bg-blue-100 text-blue-800' },
-    cancelled_by_user: { label: 'ملغي', color: 'bg-red-100 text-red-800' },
-    cancelled_by_merchant: { label: 'ملغي من التاجر', color: 'bg-red-100 text-red-800' },
-};
+const bookings = [
+    { type: 'تذكرة فعالية', event: 'فعالية الشتاء', date: '2025-12-16', status: 'مدفوع', category: 'active' },
+    { type: 'حجز طاولة', event: 'مطعم الذواقة', date: '2025-12-20', status: 'مؤكد', category: 'active' },
+    { type: 'تجربة', event: 'تجربة الغوص', date: '2025-11-05', status: 'مستخدم', category: 'past' },
+    { type: 'Badge مؤتمر', event: 'مؤتمر TechCon', date: '2025-10-15', status: 'ملغي', category: 'cancelled' },
+];
 
-const BookingCard = React.memo(({ booking, onAction }) => (
-    <Card className="shadow-md hover:shadow-lg transition-shadow">
-        <CardHeader>
-            <div className="flex justify-between items-start">
-                <div>
-                    <CardTitle className="text-lg font-bold">{booking.event}</CardTitle>
-                    <CardDescription className="text-sm text-slate-500">{booking.serviceType}</CardDescription>
-                </div>
-                <Badge className={`${statusMap[booking.status]?.color || 'bg-gray-200'} text-xs`}>{statusMap[booking.status]?.label || booking.status}</Badge>
-            </div>
-        </CardHeader>
-        <CardContent className="space-y-3 text-sm">
-            <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-primary" />
-                <span>{format(parseISO(booking.date), 'eeee, d MMMM yyyy', { locale: ar })}</span>
-            </div>
-            <div className="font-semibold text-base">
-                {booking.amount.toLocaleString('ar-SA', { style: 'currency', currency: 'SAR' })}
-            </div>
-        </CardContent>
-        <CardFooter className="flex gap-2 bg-slate-50 p-3">
-            {isFuture(parseISO(booking.date)) && booking.status === 'paid' && (
-                <Button variant="outline" size="sm" onClick={() => onAction('cancel', booking.id)}>إلغاء الحجز</Button>
-            )}
-            {isPast(parseISO(booking.date)) && booking.status === 'used' && (
-                <Button variant="default" size="sm" onClick={() => onAction('review', booking.id)} className="bg-amber-500 hover:bg-amber-600 text-white">
-                    <Star className="w-4 h-4 ml-2" />
-                    أضف تقييم
-                </Button>
-            )}
-            <Button variant="ghost" size="sm" onClick={() => onAction('contact', booking.id)}><MessageSquare className="w-4 h-4 ml-2" />تواصل مع المزود</Button>
-            <Button variant="ghost" size="sm" onClick={() => onAction('contract', booking.id)}><FileText className="w-4 h-4 ml-2" />عرض العقد</Button>
-        </CardFooter>
-    </Card>
-));
-
-const BookingsGrid = ({ bookings, onAction }) => {
-    const parentRef = useRef(null);
-
-    const rowVirtualizer = useVirtualizer({
-        count: Math.ceil(bookings.length / 3),
-        getScrollElement: () => parentRef.current,
-        estimateSize: () => 250,
-        overscan: 5,
-    });
-
-    return (
-        <div ref={parentRef} className="h-[600px] overflow-y-auto">
-            <div
-                style={{
-                    height: `${rowVirtualizer.getTotalSize()}px`,
-                    width: '100%',
-                    position: 'relative',
-                }}
-            >
-                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                    const startIndex = virtualRow.index * 3;
-                    const endIndex = Math.min(startIndex + 3, bookings.length);
-                    const rowBookings = bookings.slice(startIndex, endIndex);
-
-                    return (
-                        <div
-                            key={virtualRow.index}
-                            style={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                width: '100%',
-                                height: `${virtualRow.size}px`,
-                                transform: `translateY(${virtualRow.start}px)`,
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                                gap: '1.5rem',
-                                padding: '0.5rem'
-                            }}
-                        >
-                            {rowBookings.map(booking => (
-                                <BookingCard key={booking.id} booking={booking} onAction={onAction} />
-                            ))}
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
-};
-
+const statusBadges = { 'مدفوع': 'bg-emerald-100 text-emerald-800', 'مؤكد': 'bg-sky-100 text-sky-800', 'مستخدم': 'bg-slate-100 text-slate-800', 'ملغي': 'bg-red-100 text-red-800' };
 
 const CustomerBookings = ({ handleFeatureClick }) => {
-    const [allBookings, setAllBookings] = useState([]);
-    const [activeTab, setActiveTab] = useState('upcoming');
-
-    useEffect(() => {
-        const storedBookings = JSON.parse(localStorage.getItem('lilium_night_all_bookings_v1')) || [];
-        const customerBookings = storedBookings.filter(b => b.customer !== '-');
-        setAllBookings(customerBookings);
-    }, []);
-
-    const handleAction = (action, bookingId) => {
-        handleFeatureClick(`تنفيذ إجراء "${action}" للحجز ${bookingId}`);
-    };
-
-    const filteredBookings = useMemo(() => {
-        if (activeTab === 'upcoming') {
-            return allBookings.filter(b => isFuture(parseISO(b.date)) && (b.status === 'paid' || b.status === 'awaiting_confirmation'));
-        }
-        if (activeTab === 'past') {
-            return allBookings.filter(b => isPast(parseISO(b.date)) || b.status === 'used' || b.status.includes('cancelled'));
-        }
-        return allBookings;
-    }, [allBookings, activeTab]);
+    const renderTable = (category) => (
+        <Table>
+            <TableHeader><TableRow><TableHead>النوع</TableHead><TableHead>الفعالية/التاجر</TableHead><TableHead>التاريخ</TableHead><TableHead>الحالة</TableHead><TableHead className="text-left">إجراءات</TableHead></TableRow></TableHeader>
+            <TableBody>
+                {bookings.filter(b => b.category === category).map((booking) => (
+                    <TableRow key={booking.event}>
+                        <TableCell className="font-medium">{booking.type}</TableCell>
+                        <TableCell>{booking.event}</TableCell>
+                        <TableCell>{booking.date}</TableCell>
+                        <TableCell><Badge className={statusBadges[booking.status]}>{booking.status}</Badge></TableCell>
+                        <TableCell className="text-left flex gap-1 justify-end">
+                            <Button variant="ghost" size="icon" onClick={() => handleFeatureClick("عرض")}><Eye className="w-4 h-4"/></Button>
+                            {booking.category === 'active' && <Button variant="ghost" size="icon" onClick={() => handleFeatureClick("تعديل")}><Edit className="w-4 h-4"/></Button>}
+                            {booking.category === 'active' && <Button variant="ghost" size="icon" className="text-red-500" onClick={() => handleFeatureClick("إلغاء")}><XCircle className="w-4 h-4"/></Button>}
+                             {booking.category === 'past' && <Button variant="ghost" size="icon" className="text-amber-500" onClick={() => handleFeatureClick("تقييم")}><Star className="w-4 h-4"/></Button>}
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    );
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-2"><Ticket className="w-8 h-8 text-primary"/>حجوزاتي</h2>
-                <Button variant="outline" onClick={() => handleFeatureClick("تنزيل كل الحجوزات")}>
-                    <Download className="w-4 h-4 ml-2" />
-                    تنزيل الكل
-                </Button>
+            <div>
+                <h1 className="text-3xl font-bold text-slate-800">حجوزاتي</h1>
+                <p className="text-slate-500 mt-1">جميع حجوزاتك السابقة والقادمة.</p>
             </div>
-
-            <Tabs value={activeTab} onValueChange={setActiveTab} dir="rtl">
-                <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="upcoming">الحجوزات القادمة</TabsTrigger>
-                    <TabsTrigger value="past">الحجوزات السابقة</TabsTrigger>
-                </TabsList>
-                <TabsContent value="upcoming" className="mt-6">
-                    {filteredBookings.length > 0 ? (
-                        <BookingsGrid bookings={filteredBookings} onAction={handleAction} />
-                    ) : (
-                        <div className="text-center py-16 text-slate-500">
-                            <p>لا توجد حجوزات قادمة.</p>
-                        </div>
-                    )}
-                </TabsContent>
-                <TabsContent value="past" className="mt-6">
-                    {filteredBookings.length > 0 ? (
-                        <BookingsGrid bookings={filteredBookings} onAction={handleAction} />
-                    ) : (
-                        <div className="text-center py-16 text-slate-500">
-                            <p>لا توجد حجوزات سابقة.</p>
-                        </div>
-                    )}
-                </TabsContent>
-            </Tabs>
+            <Card>
+                <Tabs defaultValue="active">
+                    <CardHeader>
+                        <TabsList className="grid w-full grid-cols-4">
+                            <TabsTrigger value="active">✅ النشطة</TabsTrigger>
+                            <TabsTrigger value="past">🔴 منتهية</TabsTrigger>
+                            <TabsTrigger value="cancelled">❌ ملغاة</TabsTrigger>
+                            <TabsTrigger value="today">🟡 قيد الاستخدام</TabsTrigger>
+                        </TabsList>
+                    </CardHeader>
+                    <CardContent>
+                        <TabsContent value="active">{renderTable('active')}</TabsContent>
+                        <TabsContent value="past">{renderTable('past')}</TabsContent>
+                        <TabsContent value="cancelled">{renderTable('cancelled')}</TabsContent>
+                         <TabsContent value="today"><div className="text-center p-8 text-slate-500">لا توجد حجوزات مستخدمة حالياً.</div></TabsContent>
+                    </CardContent>
+                </Tabs>
+            </Card>
         </div>
     );
 };

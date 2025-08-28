@@ -1,13 +1,14 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
 const partners = [
-  { name: "مبتكرون عالميون", description: "شريك استراتيجي في الابتكار التقني للمناسبات", image: "https://images.unsplash.com/photo-1639168314917-53ecd2e3135c" },
-  { name: "حلول المستقبل", description: "حلول دفع آمنة وموثوقة للمناسبات", image: "https://images.unsplash.com/photo-1639168314917-53ecd2e3135c" },
-  { name: "عقول إبداعية", description: "خبراء في تصميم تجارب مستخدم فريدة للمناسبات", image: "https://images.unsplash.com/photo-1639168314917-53ecd2e3135c" },
-  { name: "رواد التقنية", description: "رواد في تطوير البنية التحتية لفعاليات ضخمة", image: "https://images.unsplash.com/photo-1639168314917-53ecd2e3135c" },
-  { name: "فعاليات الجيل القادم", description: "شريك في تنظيم الفعاليات الكبرى والمهرجانات", image: "https://images.unsplash.com/photo-1639168314917-53ecd2e3135c" },
-  { name: "رأس مال استثماري", description: "دعم استثماري لتوسيع أعمال تنظيم المناسبات", image: "https://images.unsplash.com/photo-1639168314917-53ecd2e3135c" },
+  { name: "Global Innovators", description: "شريك استراتيجي في الابتكار التقني" },
+  { name: "Future Solutions", description: "حلول دفع آمنة وموثوقة" },
+  { name: "Creative Minds", description: "خبراء في تصميم تجارب المستخدم" },
+  { name: "Tech Pioneers", description: "رواد في تطوير البنية التحتية" },
+  { name: "NextGen Events", description: "شريك في تنظيم الفعاليات الكبرى" },
+  { name: "Venture Capital", description: "دعم استثماري لتوسيع الأعمال" },
 ];
 
 const Partners = () => {
@@ -25,7 +26,7 @@ const Partners = () => {
             شركاء النجاح
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            نثق بشركائنا الذين يشاركوننا الرؤية في تقديم أفضل الحلول التقنية لمزوّدي الخدمات وعملائهم في عالم المناسبات.
+            نثق بشركائنا الذين يشاركوننا الرؤية في تقديم أفضل الحلول التقنية لتجارنا وعملائهم.
           </p>
         </motion.div>
         <div className="relative">
@@ -40,7 +41,7 @@ const Partners = () => {
                 className="flex flex-col items-center text-center"
               >
                 <div className="w-24 h-24 rounded-full bg-white shadow-lg border-2 border-primary/20 flex items-center justify-center mb-4">
-                   <img  className="w-16 h-16 object-contain" alt={partner.name} src={partner.image} />
+                   <img  class="w-16 h-16 object-contain" alt={partner.name} src="https://images.unsplash.com/photo-1485531865381-286666aa80a9" />
                 </div>
                 <h3 className="font-bold text-slate-700">{partner.name}</h3>
                 <p className="text-xs text-slate-500">{partner.description}</p>

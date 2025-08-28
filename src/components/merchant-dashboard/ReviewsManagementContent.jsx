@@ -1,4 +1,5 @@
-import React, { useState, useEffect, memo } from 'react';
+
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -6,13 +7,12 @@ import { Star, MessageSquare, SlidersHorizontal, ArrowUpDown } from 'lucide-reac
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 
-const initialReviews = [
-    { id: 1, customer: 'نورة القحطاني', avatar: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=200', rating: 5, comment: 'تجربة رائعة ومنظمة! كل شيء كان مثالياً. فريق العمل كان متعاوناً جداً والمكان نظيف ومرتب. سأعود بالتأكيد.', date: '2025-06-11', event: 'معرض التقنية', reply: '' },
-    { id: 2, customer: 'محمد علي', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200', rating: 4, comment: 'المكان جميل لكن كان مزدحمًا بعض الشيء. أقترح تحسين إدارة الحشود في المرات القادمة.', date: '2025-06-10', event: 'تجربة الغوص', reply: 'شكراً لملاحظتك أستاذ محمد، سنأخذها بعين الاعتبار لتحسين تجربتكم مستقبلاً.' },
-    { id: 3, customer: 'خالد المصري', avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=200', rating: 2, comment: 'للأسف، الخدمة كانت بطيئة ولم تكن الطاولة جاهزة في الوقت المحدد. انتظرنا طويلاً.', date: '2025-06-09', event: 'حجز طاولة عشاء', reply: '' },
-    { id: 4, customer: 'سارة عبدالله', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200', rating: 5, comment: 'فريق عمل محترف وودود، استمتعت كثيراً.', date: '2025-06-08', event: 'ورشة عمل فنية', reply: '' },
+const reviews = [
+    { id: 1, customer: 'نورة القحطاني', avatar: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=200', rating: 5, comment: 'تجربة رائعة ومنظمة! كل شيء كان مثالياً. فريق العمل كان متعاوناً جداً والمكان نظيف ومرتب. سأعود بالتأكيد.', date: '2025-06-11', event: 'معرض التقنية' },
+    { id: 2, customer: 'محمد علي', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200', rating: 4, comment: 'المكان جميل لكن كان مزدحمًا بعض الشيء. أقترح تحسين إدارة الحشود في المرات القادمة.', date: '2025-06-10', event: 'تجربة الغوص' },
+    { id: 3, customer: 'خالد المصري', avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=200', rating: 2, comment: 'للأسف، الخدمة كانت بطيئة ولم تكن الطاولة جاهزة في الوقت المحدد. انتظرنا طويلاً.', date: '2025-06-09', event: 'حجز طاولة عشاء' },
+    { id: 4, customer: 'سارة عبدالله', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200', rating: 5, comment: 'فريق عمل محترف وودود، استمتعت كثيراً.', date: '2025-06-08', event: 'ورشة عمل فنية' },
 ];
 
 const ratingDistribution = [
@@ -32,48 +32,7 @@ const StarRating = ({ rating }) => (
     </div>
 );
 
-const ReviewsManagementContent = memo(({ handleFeatureClick: propHandleFeatureClick }) => {
-    const { toast } = useToast();
-    const [reviews, setReviews] = useState(JSON.parse(localStorage.getItem('lilium_night_reviews_v1')) || initialReviews);
-    const [replyTexts, setReplyTexts] = useState({});
-
-    useEffect(() => {
-        localStorage.setItem('lilium_night_reviews_v1', JSON.stringify(reviews));
-    }, [reviews]);
-
-    const handleFeatureClick = (featureName) => {
-        if (propHandleFeatureClick && typeof propHandleFeatureClick === 'function') {
-            propHandleFeatureClick(featureName);
-        } else {
-            toast({
-                title: "🚧 ميزة قيد التطوير",
-                description: `ميزة "${featureName}" ليست مفعلة بعد، ولكن يمكنك طلبها في رسالتك القادمة! 🚀`,
-            });
-        }
-    };
-
-    const handleReplyChange = (reviewId, text) => {
-        setReplyTexts(prev => ({ ...prev, [reviewId]: text }));
-    };
-
-    const handleSendReply = (reviewId) => {
-        const replyText = replyTexts[reviewId];
-        if (!replyText || !replyText.trim()) {
-            toast({ title: "خطأ", description: "لا يمكن إرسال رد فارغ.", variant: "destructive" });
-            return;
-        }
-        setReviews(prevReviews => prevReviews.map(review => 
-            review.id === reviewId ? { ...review, reply: replyText } : review
-        ));
-        setReplyTexts(prev => ({ ...prev, [reviewId]: '' })); 
-        handleFeatureClick(`إرسال رد على تقييم العميل ${reviewId}`);
-    };
-    
-    const handleSortFilterClick = (featureName) => {
-         handleFeatureClick(featureName);
-    };
-
-
+const ReviewsManagementContent = ({ handleFeatureClick }) => {
     return (
         <div className="space-y-8">
             <h2 className="text-3xl font-bold text-slate-800">مراجعات العملاء</h2>
@@ -109,8 +68,8 @@ const ReviewsManagementContent = memo(({ handleFeatureClick: propHandleFeatureCl
                             <div className="flex justify-between items-center">
                                 <CardTitle>قائمة المراجعات ({reviews.length})</CardTitle>
                                 <div className="flex gap-2">
-                                    <Button variant="outline" size="sm" onClick={() => handleSortFilterClick("فرز التقييمات")}><ArrowUpDown className="w-4 h-4 ml-2"/>الأحدث أولاً</Button>
-                                    <Button variant="outline" size="sm" onClick={() => handleSortFilterClick("فلترة التقييمات")}><SlidersHorizontal className="w-4 h-4 ml-2"/>فلترة</Button>
+                                    <Button variant="outline" size="sm" onClick={() => handleFeatureClick("فرز")}><ArrowUpDown className="w-4 h-4 ml-2"/>الأحدث أولاً</Button>
+                                    <Button variant="outline" size="sm" onClick={() => handleFeatureClick("فلترة")}><SlidersHorizontal className="w-4 h-4 ml-2"/>فلترة</Button>
                                 </div>
                             </div>
                         </CardHeader>
@@ -132,26 +91,13 @@ const ReviewsManagementContent = memo(({ handleFeatureClick: propHandleFeatureCl
                                             </div>
                                             <p className="mt-2 text-slate-600 leading-relaxed">{review.comment}</p>
                                             
-                                            {review.reply && (
-                                                <div className="mt-3 p-3 bg-slate-100 rounded-md">
-                                                    <p className="text-sm font-semibold text-primary">ردك:</p>
-                                                    <p className="text-sm text-slate-700">{review.reply}</p>
-                                                </div>
-                                            )}
-
-                                            {!review.reply && (
-                                                <div className="mt-4 space-y-3">
-                                                    <Textarea 
-                                                        placeholder={`اكتب ردك على ${review.customer}...`}
-                                                        value={replyTexts[review.id] || ''}
-                                                        onChange={(e) => handleReplyChange(review.id, e.target.value)}
-                                                    />
-                                                    <Button size="sm" onClick={() => handleSendReply(review.id)}>
-                                                        <MessageSquare className="w-4 h-4 ml-2" />
-                                                        إرسال الرد
-                                                    </Button>
-                                                </div>
-                                            )}
+                                            <div className="mt-4 space-y-3">
+                                                 <Textarea placeholder={`اكتب ردك على ${review.customer}...`}/>
+                                                 <Button size="sm" onClick={() => handleFeatureClick(`الرد على ${review.customer}`)}>
+                                                    <MessageSquare className="w-4 h-4 ml-2" />
+                                                    إرسال الرد
+                                                 </Button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -162,6 +108,6 @@ const ReviewsManagementContent = memo(({ handleFeatureClick: propHandleFeatureCl
             </div>
         </div>
     );
-});
+};
 
 export default ReviewsManagementContent;

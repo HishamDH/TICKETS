@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
@@ -5,48 +6,48 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* White */
-    --foreground: 220 50% 10%; /* Dark Navy */
+    --background: 222 47% 97%;
+    --foreground: 222 84% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 220 50% 10%;
+    --card-foreground: 222 84% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 220 50% 10%;
-    --primary: 340 100% 60%; /* Vibrant Pink */
-    --primary-foreground: 0 0% 98%; /* Off-white for contrast */
-    --secondary: 340 80% 90%; /* Light Pink */
-    --secondary-foreground: 220 50% 10%; /* Dark Navy */
-    --muted: 340 80% 95%; /* Lighter Pink for muted elements */
-    --muted-foreground: 220 20% 40%; /* Darker grey for muted text */
-    --accent: 340 80% 90%; /* Light Pink */
-    --accent-foreground: 220 50% 10%; /* Dark Navy */
-    --destructive: 0 84% 60%; /* Standard red for destructive actions */
+    --popover-foreground: 222 84% 10%;
+    --primary: 18 100% 63%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 340 20% 80%; /* Soft pinkish border */
-    --input: 340 20% 90%; /* Light pinkish input background */
-    --ring: 340 100% 60%; /* Vibrant Pink for focus rings */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 18 100% 63%;
     --radius: 0.75rem;
   }
 
   .dark {
-    --background: 220 50% 10%; /* Dark Navy */
-    --foreground: 0 0% 98%; /* Off-white */
-    --card: 220 50% 15%; /* Slightly lighter navy for cards */
-    --card-foreground: 0 0% 98%;
-    --popover: 220 50% 15%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 340 100% 60%; /* Vibrant Pink */
+    --background: 222 84% 5%;
+    --foreground: 210 40% 98%;
+    --card: 222 84% 6%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 84% 6%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 18 100% 63%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 340 80% 30%; /* Darker pink for secondary in dark mode */
-    --secondary-foreground: 0 0% 98%;
-    --muted: 220 30% 20%; /* Darker muted blue */
-    --muted-foreground: 220 20% 60%; /* Lighter grey for muted text */
-    --accent: 340 80% 30%;
-    --accent-foreground: 0 0% 98%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 63% 31%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 220 30% 25%; /* Darker blue border */
-    --input: 220 30% 20%; /* Darker blue input background */
-    --ring: 340 100% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 25%;
+    --input: 217 33% 25%;
+    --ring: 18 100% 63%;
   }
 }
 
@@ -65,11 +66,11 @@
 }
 
 .gradient-bg {
-  background: linear-gradient(135deg, hsl(340 100% 60%) 0%, hsl(340 80% 70%) 100%); /* Vibrant Pink to slightly lighter pink */
+  background: linear-gradient(135deg, #f9682e 0%, #ff7842 100%);
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, hsl(340 100% 60%) 0%, hsl(340 80% 70%) 100%); /* Vibrant Pink to slightly lighter pink */
+  background: linear-gradient(135deg, #f9682e 0%, #ff7842 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -107,10 +108,10 @@
 
 @keyframes pulse-glow {
   from {
-    box-shadow: 0 0 15px hsla(340, 100%, 60%, 0.5), 0 0 5px hsla(340, 80%, 70%, 0.3);
+    box-shadow: 0 0 15px rgba(255, 120, 66, 0.5), 0 0 5px rgba(249, 104, 46, 0.3);
   }
   to {
-    box-shadow: 0 0 35px hsla(340, 100%, 60%, 0.8), 0 0 10px hsla(340, 80%, 70%, 0.5);
+    box-shadow: 0 0 35px rgba(255, 120, 66, 0.8), 0 0 10px rgba(249, 104, 46, 0.5);
   }
 }
 
@@ -120,6 +121,6 @@
 
 .hero-pattern {
   background-image: 
-    radial-gradient(circle at 15% 20%, hsla(340, 80%, 70%, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 85% 75%, hsla(340, 100%, 60%, 0.05) 0%, transparent 40%);
+    radial-gradient(circle at 15% 20%, rgba(255, 120, 66, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(249, 104, 46, 0.05) 0%, transparent 40%);
 }

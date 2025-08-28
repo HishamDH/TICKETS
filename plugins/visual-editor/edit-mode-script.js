@@ -150,11 +150,9 @@ async function handlePopupSave() {
   if (!currentEditingInfo) return;
   
   const newText = popupTextarea.value
-  // Replacing characters that cause Babel parser to crash
+  // Escape < and > to prevent user from crashing sandbox by entering invalid HTML tags into source code
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/{/g, '&#123;')
-    .replace(/}/g, '&#125;')
+    .replace(/>/g, '&gt;');
 
   const { editId } = currentEditingInfo;
 

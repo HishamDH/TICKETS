@@ -1,161 +1,78 @@
-import React, { useState, Suspense, lazy, memo } from 'react';
+
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Ticket, PlusCircle, Star, Building2, UtensilsCrossed, Camera, Music, Palette as PaletteIcon, Truck, Shield as ShieldIcon, Flower2 } from 'lucide-react';
+import { Ticket, PlusCircle, Star, PartyPopper, Building2, UtensilsCrossed, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
-import { Skeleton } from '@/components/ui/skeleton';
-
-const AddServiceDialog = lazy(() => import('@/components/merchant-dashboard/AddServiceDialog'));
 
 const servicesData = {
-  venues: {
-    title: "القاعات والقصور",
+  events: {
+    title: "الفعاليات",
+    icon: PartyPopper,
+    supportedTypes: [
+      "فعالية يوم واحد", "فعالية على عدة أيام", "فعالية متكررة شهريًا",
+      "فعالية بمقاعد مرقمة (مسرح/سينما)", "فعالية مفتوحة بدون مقاعد", "فعالية VIP / دعوات خاصة"
+    ],
+    features: [
+      "مخطط مقاعد تفاعلي (Seat Map)", "تذاكر قابلة للتصميم المخصص", "دعم QR للتحقق من الدخول",
+      "تحديد الفئة (عامة - نسائية - أطفال…)", "إمكانية ربط الفعالية بموقع محدد في الخريطة"
+    ]
+  },
+  exhibitions: {
+    title: "المعارض والمؤتمرات",
     icon: Building2,
     supportedTypes: [
-      "قاعة زفاف", "قصر أفراح", "استراحة للمناسبات", "منتجع خاص", "صالة متعددة الأغراض"
+      "معرض تقني / تجاري", "معرض تعليمي / وظيفي", "مؤتمر علمي / صحي",
+      "دورة أو ورشة عمل (training)", "معرض بيع تجزئة", "حدث مخصص للتسجيل المسبق (مغلق)"
     ],
     features: [
-      "تحديد السعة والمساحة", "إدارة المرافق (صوتيات، إضاءة، مواقف)", "تقويم حجوزات متقدم", "إمكانية إضافة صور وفيديوهات للقاعة"
+      "نظام إصدار Badge مخصص لكل مشارك", "تخصيص الحقول المطلوبة (شركة، منصب، الخ…)", "دعم QR للتحقق من البادج",
+      "إرسال البادج إلكترونيًا للطباعة أو التخزين", "طباعة البادجات يدويًا من لوحة التحكم"
     ]
   },
-  catering: {
-    title: "الإعاشة والبوفيه",
+  restaurants: {
+    title: "المطاعم واللاونجات",
     icon: UtensilsCrossed,
     supportedTypes: [
-      "بوفيه مفتوح (غداء/عشاء)", "قوائم طعام مخصصة", "خدمات ضيافة (قهوة وشاي)", "كيك وحلويات للمناسبات"
+      "حجز طاولة داخلية", "حجز طاولة خارجية", "طاولة مع حد أدنى للطلب (Minimum Charge)",
+      "طاولة VIP / كبار الزوار", "ردهة خاصة / مناسبة خاصة", "بوفيه مفتوح مع توقيت"
     ],
     features: [
-      "تحديد عدد الأفراد", "اختيار أنواع الأطباق والمشروبات", "إدارة الحساسية الغذائية", "تنسيق طاولات الطعام والديكور"
+      "تقويم زمني تفاعلي لحجز الوقت والموقع", "اختيار عدد الأشخاص", "دعم عربون أو الدفع الكامل",
+      "قبول / رفض الحجز يدويًا", "دعم ملاحظات خاصة بالحجز", "دعم طباعة تأكيد الحجز"
     ]
   },
-  photography: {
-    title: "التصوير والفيديو",
-    icon: Camera,
+  experiences: {
+    title: "التجارب (Experiences)",
+    icon: Sparkles,
     supportedTypes: [
-      "تصوير فوتوغرافي (زفاف، خطوبة، تخرج)", "تصوير فيديو احترافي", "تصوير جوي (درون)", "ألبوم صور فاخر"
+      "تجربة سياحية محلية", "تجربة مغامرات (غوص، صحراء، طيران… إلخ)", "تجربة تعليمية أو ورشة فنية",
+      "تجربة ترفيهية/عائلية (مزرعة، ألعاب، بيك نيك…)", "تجارب موسمية أو مناسبات خاصة"
     ],
     features: [
-      "تحديد عدد ساعات التغطية", "اختيار المصور/المصورة", "معرض أعمال سابق", "تسليم المواد بجودة عالية"
-    ]
-  },
-  beauty: {
-    title: "التجميل والمكياج",
-    icon: PaletteIcon,
-    supportedTypes: [
-      "مكياج عروس", "تسريحات شعر", "خدمات تجميل شاملة (مانيكير، باديكير)", "باكجات عناية بالبشرة"
-    ],
-    features: [
-      "اختيار خبيرة التجميل", "تحديد نوع المكياج والتسريحة", "إمكانية الحجز في الصالون أو المنزل", "استخدام منتجات عالية الجودة"
-    ]
-  },
-  entertainment: {
-    title: "العروض الترفيهية",
-    icon: Music,
-    supportedTypes: [
-      "فرق موسيقية (DJ, فرقة شعبية)", "عروض ضوئية وصوتية", "فقرات ترفيهية (ألعاب نارية، عروض بهلوانية)", "تأجير معدات صوت وإضاءة"
-    ],
-    features: [
-      "تحديد نوع العرض ومدته", "اختيار الفنانين أو الفرقة", "تنسيق مع متطلبات المكان", "توفير المعدات اللازمة"
-    ]
-  },
-  transportation: {
-    title: "النقل والمواصلات",
-    icon: Truck,
-    supportedTypes: [
-      "سيارات فاخرة للعروسين", "حافلات لنقل الضيوف", "خدمات صف السيارات (Valet Parking)"
-    ],
-    features: [
-      "تحديد نوع وعدد السيارات", "تحديد مسار الرحلة والمواعيد", "سائقين محترفين", "تأمين شامل للركاب"
-    ]
-  },
-  security: {
-    title: "الحراسة والأمن",
-    icon: ShieldIcon,
-    supportedTypes: [
-      "حراس أمن للمناسبات", "تأمين مداخل ومخارج القاعة", "كاميرات مراقبة"
-    ],
-    features: [
-      "تحديد عدد الحراس المطلوبين", "تنسيق خطة أمنية للمكان", "فرق مدربة ومؤهلة"
-    ]
-  },
-  flowers_invitations: {
-    title: "الورود والدعوات",
-    icon: Flower2,
-    supportedTypes: [
-      "تنسيق زهور (كوشة، طاولات)", "باقات ورد للعروس", "تصميم وطباعة بطاقات دعوة"
-    ],
-    features: [
-      "اختيار أنواع الزهور والألوان", "تصاميم مبتكرة للدعوات", "توصيل في الوقت المحدد"
+      "تحديد موعد وتفاصيل التجربة", "عدد محدود من المشاركين لكل موعد", "إدخال معلومات إضافية قبل الحجز (مثل الحالة الصحية)",
+      "إصدار تذكرة خاصة بالتجربة", "عرض المدة، موقع التجربة، مستوى الصعوبة", "إمكانية التقييم بعد التجربة"
     ]
   }
 };
 
-const AddServiceDialogFallback = () => (
-  <div className="p-4">
-    <Skeleton className="h-8 w-1/2" />
-    <Skeleton className="h-4 w-3/4 mt-2" />
-  </div>
-);
-
-
-const ServiceManagementContent = memo(({ handleNavigation, onFeatureClick }) => {
-    const { toast } = useToast();
-    const [isAddServiceDialogOpen, setIsAddServiceDialogOpen] = useState(false);
-    const [currentServiceCategory, setCurrentServiceCategory] = useState(null);
-    const [suggestedServiceNameForDialog, setSuggestedServiceNameForDialog] = useState('');
-
-
-    const openDialogForNewService = () => {
-        setCurrentServiceCategory(null);
-        setSuggestedServiceNameForDialog('');
-        setIsAddServiceDialogOpen(true);
-    };
-
-    const openDialogForCategoryService = (categoryKey, categoryTitle) => {
-        setCurrentServiceCategory(categoryKey);
-        setSuggestedServiceNameForDialog(`خدمة جديدة في ${categoryTitle}`);
-        setIsAddServiceDialogOpen(true);
-    };
-    
-    const handleInternalClick = (featureName, categoryKey = null, categoryTitle = null) => {
-        if (featureName === "إضافة خدمة جديدة") {
-            openDialogForNewService();
-        } else if (featureName.startsWith("إنشاء خدمة جديدة في مجال")) {
-            openDialogForCategoryService(categoryKey, categoryTitle);
-        } else {
-             if (typeof onFeatureClick === 'function') {
-                onFeatureClick(featureName);
-             } else {
-                toast({
-                    title: "🚧 ميزة قيد التطوير (Fallback)",
-                    description: `من "ServiceManagementContent (Fallback)": ميزة "${featureName}" ليست مفعلة بعد، ولكن يمكنك طلبها في رسالتك القادمة! 🚀`,
-                    variant: "default",
-                });
-            }
-        }
-    };
-
+const ServiceManagementContent = ({ handleFeatureClick }) => {
     return (
         <div className="space-y-8">
             <div className="flex justify-between items-center flex-wrap gap-4">
-                <h1 className="text-3xl font-bold text-slate-800">إدارة الخدمات والباقات</h1>
-                <Button className="gradient-bg text-white" onClick={() => handleInternalClick("إضافة خدمة جديدة")}>
+                <h2 className="text-3xl font-bold text-slate-800">إدارة الخدمات</h2>
+                <Button className="gradient-bg text-white" onClick={() => handleFeatureClick("إضافة خدمة جديدة")}>
                     <PlusCircle className="w-5 h-5 ml-2" />
-                    إضافة باقة أو خدمة جديدة
+                    إضافة خدمة جديدة
                 </Button>
             </div>
 
-            <Tabs defaultValue="venues" className="w-full" dir="rtl">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 h-auto p-2 bg-primary/10 rounded-xl mb-6">
+            <Tabs defaultValue="events" className="w-full" dir="rtl">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 h-auto p-2 bg-primary/10 rounded-xl mb-6">
                     {Object.entries(servicesData).map(([key, { title, icon: Icon }]) => (
-                        <TabsTrigger 
-                            key={key} 
-                            value={key} 
-                            className="flex-col sm:flex-row items-center justify-center gap-2 text-sm md:text-base py-2.5 data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg h-16 sm:h-auto"
-                        >
-                            <Icon className="h-5 w-5 mb-1 sm:mb-0"/><span>{title}</span>
+                        <TabsTrigger key={key} value={key} className="flex items-center gap-2 text-sm md:text-base py-2.5 data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg">
+                            <Icon className="h-5 w-5"/>{title}
                         </TabsTrigger>
                     ))}
                 </TabsList>
@@ -174,7 +91,7 @@ const ServiceManagementContent = memo(({ handleNavigation, onFeatureClick }) => 
                                 </CardHeader>
                                 <CardContent className="grid md:grid-cols-2 gap-x-8 gap-y-6 p-6">
                                     <div className="space-y-4">
-                                        <h2 className="font-bold text-lg text-slate-700 mb-4 border-b pb-2">🧩 الأنواع المدعومة</h2>
+                                        <h3 className="font-bold text-lg text-slate-700 mb-4 border-b pb-2">🧩 الأنواع المدعومة</h3>
                                         <ul className="space-y-3">
                                             {supportedTypes.map((type, index) => (
                                                 <li key={index} className="flex items-center gap-3 text-slate-600">
@@ -187,7 +104,7 @@ const ServiceManagementContent = memo(({ handleNavigation, onFeatureClick }) => 
                                         </ul>
                                     </div>
                                     <div className="space-y-4 md:border-r md:border-slate-200 md:pr-8">
-                                        <h2 className="font-bold text-lg text-slate-700 mb-4 border-b pb-2">⭐ المميزات الخاصة</h2>
+                                        <h3 className="font-bold text-lg text-slate-700 mb-4 border-b pb-2">⭐ المميزات الخاصة</h3>
                                         <ul className="space-y-3">
                                             {features.map((feature, index) => (
                                                 <li key={index} className="flex items-start gap-3 text-slate-600">
@@ -199,9 +116,9 @@ const ServiceManagementContent = memo(({ handleNavigation, onFeatureClick }) => 
                                     </div>
                                 </CardContent>
                                 <CardFooter className="bg-slate-50 p-4 flex justify-start">
-                                    <Button variant="outline" onClick={() => handleInternalClick(`إنشاء خدمة جديدة في مجال ${title}`, key, title)}>
+                                    <Button variant="outline" onClick={() => handleFeatureClick(`إنشاء خدمة في مجال ${title}`)}>
                                         <PlusCircle className="w-4 h-4 ml-2" />
-                                        إنشاء باقة/خدمة جديدة في هذا المجال
+                                        إنشاء خدمة جديدة في هذا المجال
                                     </Button>
                                 </CardFooter>
                             </Card>
@@ -209,16 +126,8 @@ const ServiceManagementContent = memo(({ handleNavigation, onFeatureClick }) => 
                     </TabsContent>
                 ))}
             </Tabs>
-            <Suspense fallback={<AddServiceDialogFallback />}>
-                <AddServiceDialog 
-                    isOpen={isAddServiceDialogOpen} 
-                    onOpenChange={setIsAddServiceDialogOpen}
-                    serviceCategory={currentServiceCategory}
-                    suggestedServiceName={suggestedServiceNameForDialog}
-                />
-            </Suspense>
         </div>
     );
-});
+};
 
 export default ServiceManagementContent;

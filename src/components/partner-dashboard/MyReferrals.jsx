@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -6,11 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { Users } from 'lucide-react';
 
 const referrals = [
-  { name: 'قصر الأفراح الملكي', status: 'مفعل', joinDate: '2025-06-01', totalSales: '125,000 ر.س', commission: '6,250 ر.س' },
-  { name: 'استوديو العدسة الذهبية (تصوير)', status: 'مفعل', joinDate: '2025-05-20', totalSales: '30,000 ر.س', commission: '1,500 ر.س' },
-  { name: 'مطابخ النخبة (إعاشة)', status:'معلّق', joinDate: '2025-06-10', totalSales: '0 ر.س', commission: '0 ر.س' },
-  { name: 'صالون الجمال الأنيق', status: 'مفعل', joinDate: '2025-04-15', totalSales: '15,500 ر.س', commission: '775 ر.س' },
-  { name: 'شركة تنظيم الحفلات الماسية', status: 'موقوف', joinDate: '2025-03-01', totalSales: '8,000 ر.س', commission: '400 ر.س' },
+  { name: 'مقهى القمة', status: 'مفعل', joinDate: '2023-06-01', totalSales: '45,000 ر.س', commission: '2,250 ر.س' },
+  { name: 'فعاليات الرياض', status: 'مفعل', joinDate: '2023-05-20', totalSales: '120,000 ر.س', commission: '6,000 ر.س' },
+  { name: 'تجربة الصحراء', status: 'معلّق', joinDate: '2023-06-10', totalSales: '0 ر.س', commission: '0 ر.س' },
+  { name: 'معرض الفن الحديث', status: 'مفعل', joinDate: '2023-04-15', totalSales: '78,500 ر.س', commission: '3,925 ر.س' },
+  { name: 'مطعم الأفق', status: 'موقوف', joinDate: '2023-03-01', totalSales: '12,300 ر.س', commission: '615 ر.س' },
+  { name: 'مهرجان الربيع', status: 'مفعل', joinDate: '2023-05-05', totalSales: '250,000 ر.س', commission: '12,500 ر.س' },
 ];
 
 const getStatusBadge = (status) => {
@@ -33,17 +35,17 @@ const MyReferrals = () => {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <Users className="w-6 h-6 text-primary"/>
-                        <span>مزوّدو الخدمات المسجلون عبرك</span>
+                        <span>التجار المسجلون عبرك</span>
                     </CardTitle>
                     <CardDescription>
-                        قائمة بجميع مزوّدي الخدمات الذين انضموا للمنصة باستخدام رابط الإحالة الخاص بك.
+                        قائمة بجميع التجار الذين انضموا للمنصة باستخدام رابط الإحالة الخاص بك.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>اسم مزوّد الخدمة</TableHead>
+                                <TableHead>اسم التاجر</TableHead>
                                 <TableHead>الحالة</TableHead>
                                 <TableHead>تاريخ الانضمام</TableHead>
                                 <TableHead>إجمالي المبيعات</TableHead>

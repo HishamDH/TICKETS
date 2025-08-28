@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, LogIn } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Menu, X } from 'lucide-react';
 
 const NavItem = ({ view, currentView, handleNavigation, children }) => (
   <button
@@ -24,39 +23,36 @@ const NavItem = ({ view, currentView, handleNavigation, children }) => (
   </button>
 );
 
-const Navbar = ({ currentView, handleNavigation, mobileMenuOpen, setMobileMenuOpen, appName = "ليلة الليليوم" }) => {
+const Navbar = ({ currentView, handleNavigation, mobileMenuOpen, setMobileMenuOpen }) => {
   const navLinks = [
-    { view: 'services-showcase', label: 'الخدمات' },
-    { view: 'features', label: 'مميزاتنا' },
-    { view: 'merchant-journey', label: 'رحلة مزوّد الخدمة' },
+    { view: 'home', label: 'الرئيسية' },
+    { view: 'features', label: 'المميزات' },
+    { view: 'merchant-journey', label: 'رحلة التاجر' },
     { view: 'partners-system', label: 'نظام الشركاء' },
+    { view: 'wallet-fraud-system', label: 'المحفظة والحماية' },
+    { view: 'roles', label: 'الأدوار والرحلات' },
     { view: 'pricing', label: 'الأسعار' },
     { view: 'unified-view', label: 'لوحات التحكم' },
-    { view: 'home', label: 'عن المنصة' },
   ];
 
   return (
     <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-lg border-b border-gray-200/80 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center cursor-pointer" onClick={() => handleNavigation('services-showcase')}>
-            <img  
-              alt={`شعار ${appName} الجذاب`}
+          <div className="flex items-center cursor-pointer" onClick={() => handleNavigation('home')}>
+            <img 
+              alt="شعار شباك التذاكر"
               className="w-10 h-10 ml-3"
-              src="https://lilium-night.com/wp-content/uploads/2024/07/logo-1-1.png" />
-            <span className="text-xl font-bold gradient-text">{appName}</span>
+             src="https://images.unsplash.com/photo-1674634044801-de885454a7c2" />
+            <span className="text-xl font-bold gradient-text">شباك التذاكر</span>
           </div>
 
-          <div className="hidden md:flex items-center space-x-1 space-x-reverse">
+          <div className="hidden md:flex items-center space-x-2 space-x-reverse">
             {navLinks.map(link => (
               <NavItem key={link.view} view={link.view} currentView={currentView} handleNavigation={handleNavigation}>
                 {link.label}
               </NavItem>
             ))}
-             <Button onClick={() => handleNavigation('login')} className="ml-2">
-                <LogIn className="w-4 h-4 ml-2" />
-                تسجيل الدخول
-            </Button>
           </div>
 
           <button
@@ -87,10 +83,6 @@ const Navbar = ({ currentView, handleNavigation, mobileMenuOpen, setMobileMenuOp
                     {link.label}
                   </button>
                 ))}
-                 <Button onClick={() => handleNavigation('login')} className="w-full mt-2">
-                    <LogIn className="w-4 h-4 ml-2" />
-                    تسجيل الدخول
-                </Button>
               </div>
             </motion.div>
           )}

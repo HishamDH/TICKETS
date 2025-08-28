@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Ticket } from 'lucide-react';
@@ -5,15 +6,8 @@ import { Ticket } from 'lucide-react';
 const AdminSidebar = ({ sections, activeSection, setActiveSection, isSidebarOpen, setSidebarOpen }) => {
     
     const sidebarVariants = {
-        open: { x: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } },
-        closed: { x: "100%", transition: { type: 'spring', stiffness: 300, damping: 30 } },
-    };
-
-    const handleSectionClick = (sectionId) => {
-        setActiveSection(sectionId);
-        if (window.innerWidth < 768 && setSidebarOpen) { 
-            setSidebarOpen(false);
-        }
+        open: { x: 0 },
+        closed: { x: "100%" },
     };
 
     return (
@@ -21,47 +15,32 @@ const AdminSidebar = ({ sections, activeSection, setActiveSection, isSidebarOpen
             initial={false}
             animate={isSidebarOpen ? "open" : "closed"}
             variants={sidebarVariants}
-            className="fixed top-0 right-0 h-full bg-slate-800 text-white w-72 xl:w-80 z-40 flex flex-col shadow-2xl"
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed top-0 right-0 h-full bg-slate-800 text-white w-64 z-40 flex flex-col"
         >
             <div className="p-6 mb-4 flex items-center justify-center border-b border-slate-700">
-                <img 
-                    alt="شعار ليلة الليليوم"
-                    className="w-8 h-8 ml-2 filter drop-shadow-lg"
-                    src="https://images.unsplash.com/photo-1557845767-9cc6526890f7" 
-                />
-                <h1 className="text-xl xl:text-2xl font-bold">ليلة الليليوم</h1>
+                <Ticket className="w-8 h-8 text-primary" />
+                <h1 className="text-2xl font-bold mr-2">شباك التذاكر</h1>
             </div>
-            <div className="flex-1 overflow-y-auto">
-                <nav className="px-3 xl:px-4 space-y-1.5">
-                    {sections.map(section => {
-                        if (section.isTitle) {
-                            return (
-                                <h3 key={section.id} className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-4 pt-6 pb-2">
-                                    {section.title}
-                                </h3>
-                            );
-                        }
-                        const IconComponent = section.icon || Ticket;
-                        return (
-                            <button
-                                key={section.id}
-                                onClick={() => handleSectionClick(section.id)}
-                                className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ease-in-out text-right transform hover:scale-105 hover:bg-slate-700 hover:shadow-md ${activeSection === section.id ? 'bg-primary text-white shadow-lg' : ''}`}
-                            >
-                                <IconComponent className="w-5 h-5 ml-3" />
-                                <span className="text-sm">{section.title}</span>
-                            </button>
-                        );
-                    })}
-                </nav>
-            </div>
-            <div className="p-4 border-t border-slate-700 mt-auto">
+            <nav className="flex-1 px-4 space-y-2">
+                {sections.map(section => (
+                    <button
+                        key={section.id}
+                        onClick={() => setActiveSection(section.id)}
+                        className={`w-full flex items-center p-3 rounded-lg transition-colors text-right ${activeSection === section.id ? 'bg-primary text-white' : 'hover:bg-slate-700'}`}
+                    >
+                        <section.icon className="w-5 h-5 ml-4" />
+                        <span>{section.title}</span>
+                    </button>
+                ))}
+            </nav>
+            <div className="p-4 border-t border-slate-700">
                 <p className="text-xs text-slate-400 text-center">
-                    &copy; {new Date().getFullYear()} ليلة الليليوم. جميع الحقوق محفوظة.
+                    &copy; {new Date().getFullYear()} شباك التذاكر. جميع الحقوق محفوظة.
                 </p>
             </div>
         </motion.div>
     );
 };
 
-export default React.memo(AdminSidebar);
+export default AdminSidebar;

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -14,77 +15,62 @@ import {
   Zap,
   TrendingUp,
   Award,
-  Building,
-  PartyPopper,
-  Camera,
-  Briefcase,
-  Gift,
-  ChevronLeft
+  Building
 } from 'lucide-react';
 import Partners from '@/components/layout/Partners';
-import { useToast } from "@/components/ui/use-toast";
 
-const HomePage = ({ handleNavigation }) => {
-  const { toast } = useToast();
-  const handleFeatureClick = (featureName) => {
-    toast({
-        title: "🚧 ميزة قيد التطوير",
-        description: `ميزة "${featureName}" ليست مفعلة بعد، ولكن يمكنك طلبها في رسالتك القادمة! 🚀`,
-        variant: "default",
-    });
-  };
-  
+const HomePage = ({ handleNavigation, handleFeatureClick }) => {
   const features = [
     {
       icon: Globe,
-      title: "منصة شاملة ومتكاملة",
-      description: "كل ما تحتاجه لتنظيم مناسبتك في مكان واحد، من الحجز إلى التقييم."
+      title: "موقع مستقل لكل تاجر",
+      description: "احصل على موقعك الخاص بتصميم مخصص وهوية بصرية فريدة تعكس علامتك التجارية."
     },
     {
       icon: Smartphone,
-      title: "تجربة رقمية عصرية",
-      description: "تصميم سهل الاستخدام ومتجاوب مع جميع الأجهزة لتجربة حجز سلسة."
+      title: "واجهة سهلة الاستخدام",
+      description: "تصميم عصري ومتجاوب يعمل على جميع الأجهزة بسلاسة، ليضمن تجربة رائعة لعملائك."
     },
     {
       icon: Lock,
-      title: "أمان وموثوقية عالية",
-      description: "نظام حماية متقدم لبياناتك ومدفوعاتك، مع عقود إلكترونية آمنة."
+      title: "أمان متقدم",
+      description: "نظام حماية عالي المستوى لبياناتك وبيانات عملائك، مع تشفير متطور للمدفوعات."
     },
     {
       icon: Zap,
-      title: "حلول تقنية ذكية",
-      description: "أدوات للحجز، الدفع، التمويل، إدارة المخزون، والتسويق بذكاء."
+      title: "سرعة في الأداء",
+      description: "بنية تحتية قوية تضمن نظاماً سريعاً وموثوقاً لضمان تجربة مستخدم لا مثيل لها."
     },
     {
       icon: TrendingUp,
-      title: "تقارير وتحليلات",
-      description: "إحصائيات دقيقة لمزوّدي الخدمات لمتابعة الأداء واتخاذ قرارات أفضل."
+      title: "تقارير تفصيلية",
+      description: "احصل على إحصائيات شاملة ولوحات بيانات تفاعلية لمتابعة أداء أعمالك بدقة."
     },
     {
       icon: Award,
-      title: "دعم لكافة المناسبات",
-      description: "من حفلات الزفاف إلى فعاليات الشركات، نلبي جميع احتياجاتك."
+      title: "دعم فني متميز",
+      description: "فريق دعم متخصص متاح لمساعدتك في كل خطوة، لضمان تحقيق أقصى استفادة من المنصة."
     }
   ];
 
   const services = [
     {
-      icon: PartyPopper,
-      title: "حفلات الزفاف والمناسبات",
-      description: "قاعات، تصوير، تجميل، ضيافة، وكل ما يلزم لليلة العمر.",
-      features: ["حجز قاعات وقصور", "خدمات تصوير وتجميل", "تنسيق زهور ودعوات", "ضيافة وبوفيهات فاخرة"]
+      icon: Calendar,
+      title: "إدارة الفعاليات",
+      description: "نظام متكامل لإدارة جميع أنواع الفعاليات مع خرائط مقاعد تفاعلية.",
+      features: ["خرائط مقاعد تفاعلية", "إدارة الأسعار المرنة", "تقارير المبيعات الحية", "نظام إشعارات ذكي"]
     },
     {
-      icon: Briefcase,
-      title: "فعاليات الشركات",
-      description: "تنظيم احترافي لفعاليات الشركات، عشاء العمل، واحتفالات الموظفين.",
-      features: ["حجز قاعات اجتماعات", "خدمات إعاشة متكاملة", "تنظيم لوجستي وترفيهي", "تغطية إعلامية وتصوير"]
+      icon: MapPin,
+      title: "حجوزات المطاعم",
+      description: "إدارة طاولات المطاعم وأوقات العمل مع نظام حجز متطور.",
+      features: ["إدارة الطاولات الذكية", "جدولة المواعيد بسهولة", "قوائم طعام رقمية", "نظام تقييمات العملاء"]
     },
     {
-      icon: Gift,
-      title: "المناسبات الخاصة",
-      description: "تخطيط وتنفيذ حفلات التخرج، أعياد الميلاد، وغيرها من المناسبات السعيدة.",
-      features: ["تنسيق ديكورات وثيمات", "خدمات ترفيهية متنوعة", "تأجير مستلزمات الحفلات", "حلويات وكيكات مخصصة"]
+      icon: Building,
+      title: "تنظيم المعارض",
+      description: "حلول متخصصة للمعارض مع إصدار بادجات ونظام تسجيل متقدم.",
+      features: ["إصدار بادجات احترافية", "نظام تسجيل مرن", "إدارة العارضين والرعاة", "تقارير الحضور والتفاعل"]
     }
   ];
   
@@ -105,19 +91,19 @@ const HomePage = ({ handleNavigation }) => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-8"
             >
-                <img  class="w-32 h-32 mx-auto mb-6 floating-animation" alt="شعار ليلة الليليوم المتألق" src="https://images.unsplash.com/photo-1557845767-9cc6526890f7" />
+                <img  class="w-32 h-32 mx-auto mb-6 floating-animation" alt="شعار شباك التذاكر" src="https://images.unsplash.com/photo-1691405167344-c3bbc9710ad2" />
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl font-extrabold mb-6 gradient-text">
-              ليلة الليليوم
+              شباك التذاكر
             </h1>
             
             <p className="text-xl md:text-2xl text-slate-700 mb-8 leading-relaxed">
-              منصتك الرقمية الشاملة لتنظيم أروع المناسبات
+              بوابتك الذكية لإدارة وبيع تذاكر الفعاليات والحجوزات
             </p>
             
             <p className="text-lg text-slate-500 mb-12 max-w-2xl mx-auto">
-              نجمع بين العملاء ومزوّدي الخدمات بأسلوب عصري، سهل، وآمن. نهدف إلى تبسيط كل ما يتعلق بالحفلات والفعاليات، من الحجز وحتى التقييم، عبر تجربة رقمية متكاملة.
+              منصة متكاملة تمكّن التجار من إدارة حجوزاتهم وبيع التذاكر بكل سهولة وأمان عبر مواقعهم الخاصة، مع توفير تجربة فريدة للعملاء.
             </p>
 
             <motion.div
@@ -129,20 +115,20 @@ const HomePage = ({ handleNavigation }) => {
               <Button
                 size="lg"
                 className="gradient-bg text-white px-10 py-6 text-lg font-semibold pulse-glow shadow-lg"
-                onClick={() => handleNavigation('services-showcase')}
+                onClick={() => handleNavigation('merchant-register')}
               >
-                <ChevronLeft className="mr-2 h-5 w-5" />
-                اكتشف الخدمات الآن
+                <Users className="ml-2 h-5 w-5" />
+                انضم كتاجر الآن
               </Button>
               
               <Button
                 variant="outline"
                 size="lg"
                 className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-10 py-6 text-lg font-semibold"
-                onClick={() => handleNavigation('merchant-register')}
+                onClick={() => handleNavigation('unified-view')}
               >
-                <Users className="ml-2 h-5 w-5" />
-                انضم كمزوّد خدمة
+                <Shield className="ml-2 h-5 w-5" />
+                استعراض لوحات التحكم
               </Button>
             </motion.div>
           </motion.div>
@@ -159,10 +145,10 @@ const HomePage = ({ handleNavigation }) => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
-              لماذا ليلة الليليوم؟
+              لماذا شباك التذاكر؟
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              نوفر لك كل ما تحتاجه لتنظيم مناسبات لا تُنسى، مع التركيز على الجودة والابتكار.
+              نوفر لك كل ما تحتاجه لإدارة أعمالك بكفاءة واحترافية، مع التركيز على نموك ونجاحك.
             </p>
           </motion.div>
 
@@ -175,7 +161,7 @@ const HomePage = ({ handleNavigation }) => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true, amount: 0.5 }}
                 className="bg-white p-8 rounded-2xl shadow-lg card-hover cursor-pointer text-center"
-                onClick={() => { handleFeatureClick(feature.title); handleNavigation('features');}}
+                onClick={() => handleFeatureClick(feature.title)}
               >
                 <div className="w-20 h-20 gradient-bg rounded-3xl flex items-center justify-center mb-6 mx-auto shadow-md">
                   <feature.icon className="h-10 w-10 text-white" />
@@ -198,10 +184,10 @@ const HomePage = ({ handleNavigation }) => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
-              خدماتنا المتكاملة للمناسبات
+              خدماتنا المتكاملة
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              حلول شاملة ومصممة خصيصاً لتلبية جميع احتياجاتك في تنظيم وإدارة مناسباتك السعيدة.
+              حلول شاملة ومصممة خصيصاً لتلبية جميع احتياجاتك في إدارة الفعاليات والحجوزات.
             </p>
           </motion.div>
 
@@ -214,7 +200,7 @@ const HomePage = ({ handleNavigation }) => {
                 transition={{ duration: 0.6, delay: index * 0.15 }}
                 viewport={{ once: true, amount: 0.3 }}
                 className="bg-primary/5 p-8 rounded-3xl border border-primary/10 card-hover cursor-pointer"
-                onClick={() => { handleFeatureClick(service.title); handleNavigation('services-showcase');}}
+                onClick={() => handleFeatureClick(service.title)}
               >
                 <div className="w-20 h-20 gradient-bg rounded-3xl flex items-center justify-center mb-6 shadow-lg">
                   <service.icon className="h-10 w-10 text-white" />
@@ -246,18 +232,18 @@ const HomePage = ({ handleNavigation }) => {
             viewport={{ once: true, amount: 0.8 }}
           >
             <h2 className="text-4xl font-bold mb-6">
-              هل أنت جاهز لتنظيم مناسبتك القادمة؟
+              هل أنت جاهز لبدء رحلتك معنا؟
             </h2>
             <p className="text-xl mb-10 max-w-2xl mx-auto opacity-90">
-              انضم إلى عملائنا السعداء ومزوّدي الخدمات المتميزين الذين يثقون في ليلة الليليوم.
+              انضم إلى آلاف التجار الذين يثقون في شباك التذاكر لتحويل أفكارهم إلى واقع ناجح.
             </p>
             <Button
               size="lg"
               className="bg-white text-primary hover:bg-gray-100 px-10 py-6 text-lg font-bold shadow-2xl transform hover:scale-105 transition-transform"
-              onClick={() => { handleFeatureClick('ابدأ الآن'); handleNavigation('services-showcase');}}
+              onClick={() => handleNavigation('merchant-register')}
             >
               <Ticket className="ml-2 h-5 w-5" />
-              ابدأ الآن
+              ابدأ الآن مجاناً
             </Button>
           </motion.div>
         </div>

@@ -1,10 +1,10 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Users, Target, ShieldCheck, Briefcase, Link as LinkIcon, PieChart, DollarSign, QrCode, ClipboardList } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast";
 
 const PartnerRoleCard = ({ icon, title, description, details }) => {
   const IconComponent = icon;
@@ -82,14 +82,6 @@ const WorkflowStep = ({ stage, action, index }) => (
 
 
 const PartnersSystemPage = () => {
-  const { toast } = useToast();
-  const handleFeatureClick = (featureName) => {
-    toast({
-        title: "🚧 ميزة قيد التطوير",
-        description: `ميزة "${featureName}" ليست مفعلة بعد، ولكن يمكنك طلبها في رسالتك القادمة! 🚀`,
-        variant: "default",
-    });
-  };
     
   const systemComponents = {
     representative: {
@@ -159,12 +151,12 @@ const PartnersSystemPage = () => {
             نظام الشركاء والمندوبين
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-            في منصة ليلة الليليوم (سابقاً شباك التذاكر)
+            في منصة شباك التذاكر
           </p>
         </motion.header>
 
         <section className="mb-16">
-            <Card className="max-w-4xl mx-auto bg-white/60 backdrop-blur-sm border-2 border-green-500/20 shadow-xl p-8 text-center" onClick={() => handleFeatureClick("الهدف من النظام")}>
+            <Card className="max-w-4xl mx-auto bg-white/60 backdrop-blur-sm border-2 border-green-500/20 shadow-xl p-8 text-center">
                 <Target className="w-12 h-12 text-green-500 mx-auto mb-4" />
                 <h2 className="text-3xl font-bold text-gray-800 mb-2">🎯 الهدف من النظام</h2>
                 <p className="text-lg text-gray-600">
@@ -177,9 +169,9 @@ const PartnersSystemPage = () => {
           <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">🧩 مكونات النظام</h2>
           <Tabs defaultValue="representative" className="w-full max-w-6xl mx-auto">
             <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 gap-2">
-              <TabsTrigger value="representative" onClick={() => handleFeatureClick("عرض تفاصيل المندوب")}>المندوب</TabsTrigger>
-              <TabsTrigger value="affiliate" onClick={() => handleFeatureClick("عرض تفاصيل الشريك التسويقي")}>الشريك التسويقي</TabsTrigger>
-              <TabsTrigger value="accountManager" onClick={() => handleFeatureClick("عرض تفاصيل أخصائي الحسابات")}>أخصائي الحسابات</TabsTrigger>
+              <TabsTrigger value="representative">المندوب</TabsTrigger>
+              <TabsTrigger value="affiliate">الشريك التسويقي</TabsTrigger>
+              <TabsTrigger value="accountManager">أخصائي الحسابات</TabsTrigger>
             </TabsList>
             <TabsContent value="representative" className="mt-6">
               <PartnerRoleCard {...systemComponents.representative} />
@@ -197,7 +189,7 @@ const PartnersSystemPage = () => {
           <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">🖥️ لوحة تحكم المندوب / الشريك</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {dashboardFeatures.map((feature, index) => (
-                <motion.div key={index} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: index * 0.1 }} onClick={() => handleFeatureClick(feature.title)}>
+                <motion.div key={index} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: index * 0.1 }}>
                     <InfoCard icon={feature.icon} title={feature.title}>
                         <ul className="list-disc list-inside space-y-2">
                             {feature.content.map((item, i) => <li key={i}>{item}</li>)}
